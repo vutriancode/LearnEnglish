@@ -1,0 +1,1 @@
+pkill -f "python3.10 -u vocabulary.py"
