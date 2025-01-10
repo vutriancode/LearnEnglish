@@ -17,6 +17,22 @@ def connect():
     drive_service = build('drive', 'v3', credentials=credentials)
     return googles_sheets_service, drive_service
 
+
+def get_topics_for_today():
+    service, drive_service = connect()
+    range_ = 'topics'
+    result = service.spreadsheets().values().get(
+        spreadsheetId=GRAMMAR_SPREADSHEET_ID, range=range_).execute()
+    values = result.get('values', [])
+    if not values:
+        print('No data found.')
+        return None
+    else:
+        # Giả sử hàng đầu là header
+        header = values[0]
+        rows = values[1:]
+        df = pd.DataFrame(rows, columns=header)
+        return df
 #get vocabulary for today
 def get_vocabulary_for_today():
     service, drive_service = connect()

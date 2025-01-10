@@ -1,8 +1,7 @@
-from src.notification_service.send_message_telegram import notify_vocabulary
+from src.notification_service.send_message_telegram import notify_vocabulary,notify_grammar
 import schedule
 import time
 from datetime import datetime, timedelta
-
 def job():
     print("Đã bắt đầu chạy tác vụ")
 
@@ -10,7 +9,11 @@ def job():
     current_time = datetime.utcnow() + timedelta(hours=7) # UTC+7
     current_time = current_time.time()
     if current_time >= datetime.strptime("06:00", "%H:%M").time() and current_time <= datetime.strptime("23:00", "%H:%M").time():
-        notify_vocabulary()
+        try:
+            notify_vocabulary()
+            notify_grammar()
+        except Exception as e:
+            print("Có lỗi xảy ra khi gửi thông báo từ vựng. Lỗi: ", e)
 
 # Lên lịch chạy mỗi 5 phút
 schedule.every(10).minutes.do(job)
